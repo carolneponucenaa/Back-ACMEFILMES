@@ -55,6 +55,14 @@ app.get('/v2/Acme/filmes', cors(), async function(request, response, next){
     }
 
 })
+
+app.get('/v2/Acme/filme/:id', cors(), async function(request, response, next){
+    let idFilme = request.params.id
+    let dadosFilme = await controllerFilmes.getBuscarFilme(idFilme)
+
+    response.status(dadosFilme.status_code)
+    response.json(dadosFilme)
+})
 app.listen('8080', function() {
     console.log('API funcionando e aguardando requisições')
 })
