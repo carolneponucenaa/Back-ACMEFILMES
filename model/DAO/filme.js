@@ -21,7 +21,7 @@ const insertFilme = async function(dadosFilme){
                                       sinopse,
                                       duracao,
                                       data_lancamento,
-                                      data_relancamento,
+                                      
                                       foto_capa,
                                       valor_unitario
                                     ) values (
@@ -29,7 +29,6 @@ const insertFilme = async function(dadosFilme){
                                         '${dadosFilme.sinopse}',
                                         '${dadosFilme.duracao}',
                                         '${dadosFilme.data_lancamento}',
-                                        '${dadosFilme.data_relancamento}',
                                         '${dadosFilme.foto_capa}',
                                         '${dadosFilme.valor_unitario}'
                                     )
