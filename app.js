@@ -33,7 +33,7 @@ app.use((request, response, next) => {
     next()
 })
 
-const bodyParserJSON = bodyParser.json
+const bodyParserJSON = bodyParser.json()
 //Import dos arquivos internos do projeto
 const controllerFilmes = require('./controller/controller_filme.js')
 //1
@@ -58,13 +58,18 @@ app.get('/v2/Acme/filmes', cors(), async function(request, response, next){
 })
 
 app.post('/v2/Acme/filme', cors(), bodyParserJSON, async function(request, response, next){
+
+    let contentType = request.headers['content-type']
+    console.log('contentType')
+    
     let dadosBody = request.body
 
-    let resultDados = await controllerFilmes.setInserirNovoFilme(dadosBody)
+    let resultDados = await controllerFilmes.setInserirNovoFilme(dadosBody, contentType)
 
     response.status(resultDados.status_code)
     response.json(resultDados)
 })
+
 app.listen('8080', function() {
     console.log('API funcionando e aguardando requisições')
 })
