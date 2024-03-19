@@ -11,7 +11,7 @@ const {PrismaClient} = require('@prisma/client')
 // Instanciando a classe PrismaClient
 const prisma = new PrismaClient();
 
-const insertFilme = async function(dadosFilme){
+const insertFilme = async function(dadosFilme, contentType){
     try{
     let = sql
     if(dadosFilme.data_relancamento == null || dadosFilme.data_relancamento == undefined ||
@@ -67,14 +67,69 @@ const insertFilme = async function(dadosFilme){
 }  
 
 
-const updateFilme = async function(){
-    
+const updateFilme = async (dadosFilme, idFilme) => {
+
+    let sql
+
+    try {
+
+        if (dadosFilme.data_relancamento == null ||
+            dadosFilme.data_relancamento == undefined ||
+            dadosFilme.data_relancamento == ''
+        ) {
+
+            sql = `update tbl_filme set 
+                                                '${dadosFilme.nome}',
+                                                '${dadosFilme.sinopse}',
+                                                '${dadosFilme.duracao}',
+                                                '${dadosFilme.data_lancamento}',
+                                                '${dadosFilme.foto_capa}',
+                                                '${dadosFilme.valor_unitario}'
+                    where id = ${idFilme}`
+
+        } else {
+
+            sql = `update tbl_filme set
+                                                   '${dadosFilme.nome}',
+                                                   '${dadosFilme.sinopse}',
+                                                   '${dadosFilme.duracao}',
+                                                   '${dadosFilme.data_lancamento}',
+                                                   '${dadosFilme.data_relancamento}',
+                                                   '${dadosFilme.foto_capa}',
+                                                   '${dadosFilme.valor_unitario}'
+                    where id = ${idFilme}`
+
+        }
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result)
+            return true
+
+        else
+            return false
+
+    } catch (error) {
+
+        return false
+    }
+
 }
 
-const deleteFilme = async function(){
-    
-}
 
+const deleteFilme = async (id) => {
+
+    try {
+        let sql = `delete from tbl_filme where id = ${id}`
+
+        let rsFilmes = await prisma.$queryRawUnsafe(sql)
+
+        return rsFilmes
+
+    } catch (error) {
+        return false
+    }
+
+}
 const selectAllFilmes = async function(){
     //ScriptSQL para buscar todos os registros no BD
     let sql = 'select * from tbl_filme'

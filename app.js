@@ -70,6 +70,26 @@ app.post('/v2/Acme/filme', cors(), bodyParserJSON, async function(request, respo
     response.json(resultDados)
 })
 
+app.delete('v2/acmefilmes/delete/:id', cors (), async function (request,response,next){
+
+    let idFilmes = request.params.id
+    let dadosFilme = await controllerFilmes.setExcluirFilme(idFilmes);
+
+    response.status(dadosFilme.status_code);
+    response.json(dadosFilme)
+})
+
+app.put('/v2/acmefilmes/uptade/:id', cors(), async function(request,response,next){
+
+    let FilmesID = request.params.id
+    let contentType = request.headers['content-type'];
+    let resultUptadedFilme = await controllerFilmes.setAtualizarNovoFilme(FilmesID, contentType);
+
+    response.status(resultUptadedFilme.status_code)
+    response.json(resultUptadedFilme)
+
+} )
+
 app.listen('8080', function() {
     console.log('API funcionando e aguardando requisições')
 })
