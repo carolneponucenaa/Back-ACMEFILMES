@@ -79,24 +79,25 @@ const updateFilme = async (dadosFilme, idFilme) => {
         ) {
 
             sql = `update tbl_filme set 
-                                                '${dadosFilme.nome}',
-                                                '${dadosFilme.sinopse}',
-                                                '${dadosFilme.duracao}',
-                                                '${dadosFilme.data_lancamento}',
-                                                '${dadosFilme.foto_capa}',
-                                                '${dadosFilme.valor_unitario}'
+                                                nome ='${dadosFilme.nome}',
+                                                sinopse = '${dadosFilme.sinopse}',
+                                                duracao = '${dadosFilme.duracao}',
+                                                data_lancamento = '${dadosFilme.data_lancamento}',
+                                                data_relancamento = null,
+                                                foto_capa = '${dadosFilme.foto_capa}',
+                                                valor_unitario = '${dadosFilme.valor_unitario}'
                     where id = ${idFilme}`
 
         } else {
 
             sql = `update tbl_filme set
-                                                   '${dadosFilme.nome}',
-                                                   '${dadosFilme.sinopse}',
-                                                   '${dadosFilme.duracao}',
-                                                   '${dadosFilme.data_lancamento}',
-                                                   '${dadosFilme.data_relancamento}',
-                                                   '${dadosFilme.foto_capa}',
-                                                   '${dadosFilme.valor_unitario}'
+                                                nome ='${dadosFilme.nome}',
+                                                sinopse = '${dadosFilme.sinopse}',
+                                                duracao = '${dadosFilme.duracao}',
+                                                data_lancamento = '${dadosFilme.data_lancamento}',
+                                                data_relancamento ='${dadosFilme.data_relancamento}',
+                                                foto_capa = '${dadosFilme.foto_capa}',
+                                                valor_unitario = '${dadosFilme.valor_unitario}'
                     where id = ${idFilme}`
 
         }
@@ -109,7 +110,7 @@ const updateFilme = async (dadosFilme, idFilme) => {
             return false
 
     } catch (error) {
-
+        // console.log(error)
         return false
     }
 

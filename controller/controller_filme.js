@@ -69,46 +69,73 @@ const setAtualizarFilme = async function(id, dadosFilme, contentType){
             dadosFilme.duracao          == '' || dadosFilme.duracao         == undefined || dadosFilme.duracao.length           > 8     ||
             dadosFilme.data_lancamento  == '' || dadosFilme.data_lancamento == undefined || dadosFilme.data_lancamento.length   > 10    ||
             dadosFilme.foto_capa        == '' || dadosFilme.foto_capa       == undefined || dadosFilme.foto_capa.length         > 200   ||
-            dadosFilme.valor_unitario.length > 8 
-        ){
-            return message.ERROR_REQUIRED_FIELDS 
-        }else{
-            let statusValidated = false
-        
-            if(dadosFilme.data_relancamento != null){
-                if(dadosFilme.data_relancamento.length > 10)
-                    return message.ERROR_REQUIRED_FIELDS 
-                else
-                 statusValidated = true
+            dadosFilme.valor_unitario.length > 8 ){
+                return message.ERROR_REQUIRED_FIELDS 
             }else{
-                statusValidated = true
-            }
-            if (statusValidated){
-                let filmeAtualizado = await filmesDAO.insertFilme(dadosFilme)
-                if(filmeAtualizado){
-                    atualizarFilmeJSON.status         = message.SUCESS_CREATED_ITEM.status;
-                    atualizarFilmeJSON.status_code    = message.SUCESS_CREATED_ITEM.status_code;
-                    atualizarFilmeJSON.message        = message.SUCESS_CREATED_ITEM.message
-                    atualizarFilmeJSON.id = id
-                    atualizarFilmeJSON.filme          = dadosFilme
-        
-                    return atualizarFilmeJSON
+                let statusValidated = false
+            
+                if(dadosFilme.data_relancamento != null){
+                    if(dadosFilme.data_relancamento.length > 10)
+                        return message.ERROR_REQUIRED_FIELDS 
+                    else
+                        statusValidated = true
                 }else{
-                    return message.ERROR_INTERNAL_SERVER_DB 
+                    statusValidated = true
+                
+                    if (statusValidated){
+                        let filmeAtualizado = await filmesDAO.updateFilme(dadosFilme, id)
+                        if(filmeAtualizado){
+                            atualizarFilmeJSON.status         = message.SUCESS_CREATED_ITEM.status;
+                            atualizarFilmeJSON.status_code    = message.SUCESS_CREATED_ITEM.status_code;
+                            atualizarFilmeJSON.message        = message.SUCESS_CREATED_ITEM.message
+                            atualizarFilmeJSON.id = id
+                            atualizarFilmeJSON.filme          = dadosFilme
+                
+                            return atualizarFilmeJSON
+                        }else{
+                            return message.ERROR_INTERNAL_SERVER_DB 
+                        }
+                    }
                 }
             }
-        }
         }else{
             return message.ERROR_CONTENT_TYPE
         }
-            }catch(error){
-                return message.ERROR_INTERNAL_SERVER
-            }
+    }catch(error){
+        return message.ERROR_INTERNAL_SERVER
+    }
 }
 
 //Excluir um filme existente
-const setExcluirFilme = async function(){
-    
+const setExcluirFilme = async function(id){
+    try {
+
+        let idFilme = id
+
+        let validaFilme = await getBuscarFilme(idFilme)
+
+        let dadosFilme = await filmesDAO.deleteFilme(idFilme)
+
+        if (idFilme == '' || idFilme == undefined || isNaN(idFilme)) {
+
+            return message.ERROR_INVALID_ID 
+
+        } else if(validaFilme.status == false){
+            return message.ERROR_NOT_FOUND
+
+        } else {
+            
+            if(dadosFilme)
+                return message.SUCESS_DELETED_ITEM 
+            else
+                return message.ERROR_INTERNAL_SERVER_DB
+
+        }
+
+
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER
+    }
 }
 
 //Retornar todos os filmes do banco de dados

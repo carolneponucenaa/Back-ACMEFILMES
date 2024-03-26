@@ -5,6 +5,7 @@ const ERROR_INTERNAL_SERVER_DB = {status: false, status_code:500, message:'Ocorr
 const SUCESS_CREATED_ITEM = {status: true, status_code: 201,message: 'Item criado com sucesso no Banco de Dados!!!'}
 const ERROR_CONTENT_TYPE = {status: false,status_code: 415, message:'O content-type não é suportado na API. Deve-se encaminhar dados em formato application/json'}
 const ERROR_INTERNAL_SERVER = {status: true, status_code: 500,message: 'Ocorreram erros no servidor Back-end na camada de serviços/negócios, portanto não foi possível processar a requisição. Contate o administrador da API!!'}
+const SUCESS_DELETED_ITEM = {status: true, status_code: 201,message: 'Item excluído com sucesso no Banco de Dados!!!'}
 
 module.exports ={
     ERROR_INVALID_ID,
@@ -13,5 +14,6 @@ module.exports ={
     ERROR_INTERNAL_SERVER_DB,
     SUCESS_CREATED_ITEM,
     ERROR_CONTENT_TYPE,
-    ERROR_INTERNAL_SERVER
+    ERROR_INTERNAL_SERVER,
+    SUCESS_DELETED_ITEM
 }
