@@ -36,6 +36,7 @@ app.use((request, response, next) => {
 const bodyParserJSON = bodyParser.json()
 //Import dos arquivos internos do projeto
 const controllerFilmes = require('./controller/controller_filme.js')
+const controllerGenero = require('./controller/controller_genero.js')
 //1
 
 app.get('/v1/Acme/filmes ', cors(), async function(request, response, next) {
@@ -91,6 +92,44 @@ app.put('/v2/acmefilmes/update/:id', cors(), bodyParserJSON, async function(requ
     response.json(resultUptadedFilme)
 
 } )
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+app.get('/v2/Acme/generos', cors(), async function(request, response, next){
+    let dadosGenero = await controllerGenero.getListarGenero()
+
+    if (dadosGenero){
+    response.json(dadosGenero)
+    response.status (200)
+    }else{
+        response.json({message: 'Nenhum registro encontrado'})
+        response.status(404)
+    }
+
+})
+
+app.post('/v2/Acme/generos', cors(), bodyParserJSON, async function(request, response, next){
+
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let resultDados = await controllerGenero.setInserirNovoGenero(dadosBody, contentType)
+
+    response.status(resultDados.status_code)
+    response.json(resultDados)
+})
+
+app.delete('/v2/Acme/generos/:id',  cors(), bodyParserJSON, async (request, response, next) => {
+   
+    let idGenero = request.params.id
+    let dadosGenero = await controllerGenero.setExcluirGenero(idGenero)
+
+    response.status(dadosGenero.status_code)
+    response.json(dadosGenero)
+
+})
+
 
 app.listen('8080', function() {
     console.log('API funcionando e aguardando requisições')
