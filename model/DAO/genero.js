@@ -1,5 +1,5 @@
 /*********************************
- * Objetivo: Arquivo responsável por realizar validações, consistencia e regra de negócio para os filmes
+ * Objetivo: Arquivo responsável por realizar validações, consistencia e regra de negócio para os generos
  * Data: 16/04/2024
  * Autor: Carolina Neponucena
  * Versão: 1.0
@@ -33,9 +33,9 @@ const updateGenero=async function(id, dadosGenero){
             update tbl_genero 
 
             set 
-                nome='${dadosGenero.nome}'
+                nome="${dadosGenero.nome}"
 
-            where id='${id}';
+            where id=${id};
         `
         let result=await prisma.$executeRawUnsafe(sql)
         if(result)

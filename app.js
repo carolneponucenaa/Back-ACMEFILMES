@@ -37,7 +37,11 @@ const bodyParserJSON = bodyParser.json()
 //Import dos arquivos internos do projeto
 const controllerFilmes = require('./controller/controller_filme.js')
 const controllerGenero = require('./controller/controller_genero.js')
-//1
+const controllerClassificacao = require('./controller/controller_classificacao.js')
+
+
+//FILMES
+//////////////////////////////////////////////////////////////////////////////////
 
 app.get('/v1/Acme/filmes ', cors(), async function(request, response, next) {
 
@@ -93,6 +97,7 @@ app.put('/v2/acmefilmes/update/:id', cors(), bodyParserJSON, async function(requ
 
 } )
 
+//GENERO
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -129,6 +134,72 @@ app.delete('/v2/Acme/generos/:id',  cors(), bodyParserJSON, async (request, resp
     response.json(dadosGenero)
 
 })
+
+app.put('/v2/Acmegeneros/update/:id', cors(), bodyParserJSON, async function(request,response,next){
+
+    let GenerosID = request.params.id
+    let dadosGenero = request.body
+    console.log(dadosGenero)
+    let contentType = request.headers['content-type'];
+    let resultUptadedGenero = await controllerGenero.setAtualizarGenero(GenerosID, dadosGenero,contentType);
+
+    response.status(resultUptadedGenero.status_code)
+    response.json(resultUptadedGenero)
+
+} )
+
+//CLASSIFICAÇÃO
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+app.post('/v2/Acme/classificacao', cors(), bodyParser.json(), async function(request, response, next){
+    let contentType = request.headers['content-type']
+    console.log('contentType')
+    
+    let dadosBody = request.body
+
+    let resultDados = await controllerClassificacao.setInserirClassificacao(dadosBody, contentType)
+
+    response.status(resultDados.status_code)
+    response.json(resultDados)
+
+})
+
+app.get('/v2/Acme/classificacao', cors(), async function(request, response, next){
+    let dadosClassificacao = await controllerClassificacao.getListarClassificacao()
+
+    if (dadosClassificacao){
+    response.json(dadosClassificacao)
+    response.status (200)
+    }else{
+        response.json({message: 'Nenhum registro encontrado'})
+        response.status(404)
+    }
+
+})
+
+app.delete('/v2/Acme/classificacao/:id',  cors(), bodyParserJSON, async (request, response, next) => {
+   
+    let idClassificacao = request.params.id
+    let dadosClassificacao = await controllerClassificacao.setExcluirClassificacao(idClassificacao)
+
+    response.status(dadosClassificacao.status_code)
+    response.json(dadosClassificacao)
+
+})
+app.put('/v2/Acmeclassificacao/update/:id', cors(), bodyParserJSON, async function(request,response,next){
+
+    let ClassificacaoID = request.params.id
+    let dadosClassificacao = request.body
+    console.log(dadosClassificacao)
+    let contentType = request.headers['content-type'];
+    let resultUptadedClassificacao = await controllerClassificacao.setAtualizarClassificacao(ClassificacaoID, dadosClassificacao,contentType);
+
+    response.status(resultUptadedClassificacao.status_code)
+    response.json(resultUptadedClassificacao)
+
+})
+
 
 
 app.listen('8080', function() {

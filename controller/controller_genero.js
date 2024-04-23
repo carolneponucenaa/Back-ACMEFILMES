@@ -1,5 +1,5 @@
 /*********************************
- * Objetivo: Arquivo responsável por realizar validações, consistencia e regra de negócio para os filmes
+ * Objetivo: Arquivo responsável por realizar validações, consistencia e regra de negócio para os generos
  * Data: 16/04/2024
  * Autor: Carolina Neponucena
  * Versão: 1.0
@@ -44,7 +44,44 @@ const setInserirNovoGenero = async function (dadosGenero, contentType) {
     }
 }
 
-const setAtualizarGenero = async function(id, dadosGenero, contentType){}
+const setAtualizarGenero = async function(id, dadosGenero, contentType){
+    
+    try{
+        if (String (contentType).toLowerCase() == 'application/json'){
+            let statusValidated = false
+            let atualizarGeneroJSON={}
+    
+            console.log(dadosGenero.nome)
+            if( dadosGenero.nome             == '' || dadosGenero.nome            == undefined || dadosGenero.nome            == null || dadosGenero.nome.length              > 80    ){
+                return message.ERROR_REQUIRED_FIELDS 
+            }else{
+                statusValidated = true
+            }
+                
+                    if (statusValidated){
+                        let generoAtualizado = await generoDAO.updateGenero(id, dadosGenero)
+
+                        console.log(generoAtualizado)
+                        if(generoAtualizado){
+                            atualizarGeneroJSON.status         = message.SUCESS_CREATED_ITEM.status;
+                            atualizarGeneroJSON.status_code    = message.SUCESS_CREATED_ITEM.status_code;
+                            atualizarGeneroJSON.message        = message.SUCESS_CREATED_ITEM.message,
+                            atualizarGeneroJSON.id = id,
+                            atualizarGeneroJSON.genero          = dadosGenero
+                
+                            return atualizarGeneroJSON
+                        }else{
+                            return message.ERROR_INTERNAL_SERVER_DB 
+                        }
+                    
+            }
+        }else{
+            return message.ERROR_CONTENT_TYPE
+        }
+    }catch(error){
+        return message.ERROR_INTERNAL_SERVER
+    }
+}
 
 const setExcluirGenero = async function (id) {
     try {
