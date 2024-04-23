@@ -10,14 +10,12 @@ const {PrismaClient} = require('@prisma/client')
 
 const prisma = new PrismaClient();
 
-const insertSexo=async function(dadosSexo){
+const insertNacionalidade=async function(dadosNacionalidade){
     try {
-        let sql=`insert into tbl_sexo (
-                sigla,
+        let sql=`insert into tbl_nacionalidade (
                 nome
             ) values(
-                '${dadosSexo.sigla}'
-                '${dadosSexo.nome}'
+                '${dadosNacionalidade.nome}'
             )`
             let result=await prisma.$executeRawUnsafe(sql)
             if(result)
@@ -29,14 +27,13 @@ const insertSexo=async function(dadosSexo){
     }
 }
 
-const updateSexo=async function(id, dadosSexo){
+const updateNacionalidade =async function(id, dadosNacionalidade){
     try {
         let sql=`
-            update tbl_sexo 
+            update tbl_nacionalidade 
 
             set 
-            sigla="${dadosSexo.sigla}"
-            nome="${dadosSexo.nome}"
+            nome="${dadosNacionalidade.nome}"
 
             where id=${id};
         `
@@ -50,14 +47,14 @@ const updateSexo=async function(id, dadosSexo){
     }
 }
 
-const deleteSexo = async (id) => {
+const deleteNacionalidade = async (id) => {
 
     try {
-        let sql = `delete from tbl_sexo where id = ${id}`
+        let sql = `delete from tbl_nacionalidade where id = ${id}`
 
-        let rsSexo = await prisma.$queryRawUnsafe(sql)
+        let rsNacionalidade = await prisma.$queryRawUnsafe(sql)
 
-        return rsSexo
+        return rsNacionalidade
 
     } catch (error) {
         return false
@@ -65,34 +62,34 @@ const deleteSexo = async (id) => {
 
 }
 
-const selectAllSexo = async function(){
+const selectAllNacionalidade = async function(){
 
-    let sql = 'select * from tbl_sexo'
+    let sql = 'select * from tbl_nacionalidade'
 
-    let rsSexo = await prisma.$queryRawUnsafe(sql)
+    let rsNacionalidade = await prisma.$queryRawUnsafe(sql)
 
-    if (rsSexo.length > 0){
-    return rsSexo
+    if (rsNacionalidade.length > 0){
+    return rsNacionalidade
 }
     else{
     return false
 }
 }
 
-const selectByIdSexo = async function(id){
+const selectByIdNacionalidade = async function(id){
     try{
-    let sql = `select * from tbl_sexo where id= ${id}`
-    let rsSexo = await prisma.$queryRawUnsafe(sql)
-    return rsSexo
+    let sql = `select * from tbl_nacionalidade where id= ${id}`
+    let rsNacionalidade = await prisma.$queryRawUnsafe(sql)
+    return rsNacionalidade
 }
 catch(error){
     return false
 }}
 module.exports
 {
-    insertSexo,
-    selectAllSexo,
-    selectByIdSexo,
-    deleteSexo,
-    updateSexo
+    insertNacionalidade,
+    selectAllNacionalidade,
+    selectByIdNacionalidade,
+    deleteNacionalidade,
+    updateNacionalidade
 }
