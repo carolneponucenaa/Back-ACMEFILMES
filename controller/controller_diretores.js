@@ -6,6 +6,8 @@
  */
 const message = require('../model/config')
 const diretoresDAO = require('../model/DAO/diretores.js')
+const sexoDAO = require('../model/DAO/sexo')
+const nacionalidadeDAO = require('../model/DAO/nacionalidade')
 
 const setInserirDiretores = async function(dadosDiretores, contentType){
 
@@ -22,7 +24,6 @@ const setInserirDiretores = async function(dadosDiretores, contentType){
                 dadosDiretores.data_nascimento == ''|| dadosDiretores.data_nascimento == undefined || dadosDiretores.data_nascimento == null || dadosDiretores.data_nascimento > 300 ||
                 dadosDiretores.data_falecimento == ''|| dadosDiretores.data_falecimento == undefined || dadosDiretores.data_falecimento == null || dadosDiretores.data_falecimento > 300||
                 dadosDiretores.biografia == ''|| dadosDiretores.biografia == undefined || dadosDiretores.biografia == null || dadosDiretores.biografia > 3000 ||
-                dadosDiretores.sexo == ''|| dadosDiretores.sexo == undefined || dadosDiretores.sexo == null || dadosDiretores.sexo > 30 ||
                 dadosDiretores.id_sexo == ''|| dadosDiretores.id_sexo == undefined || dadosDiretores.id_sexo == null
                 ){
                     return message.ERROR_REQUIRED_FIELDS
@@ -56,17 +57,31 @@ const setInserirDiretores = async function(dadosDiretores, contentType){
 
 const getListarDiretores = async function(){
 
-    let diretoresJSON = {};
-    let dadosDiretores = await diretoresDAO.selectAllDiretores();
+    let diretoresJSON = {}
+    let dadosDiretores = await diretoresDAO.selectAllDiretores()
 
     if(dadosDiretores){
-        diretoresJSON.diretores = dadosDiretores;
-        diretoresJSON.quantidade = dadosDiretores.length;
-        diretoresJSON.status_code = 200;
 
-        return diretoresJSON;
+        const promisse = dadosDiretores.map(async(diretores)=>{
+            let sexoJSON = await sexoDAO.selectByIdSexo(diretores.id_sexo)
+            diretores.sexo = sexoJSON
+            let nacionalidadeJSON = await nacionalidadeDAO.selectByIdNacionalidade(diretores.id)
+           
+            if(nacionalidadeJSON.length > 0){ 
+                diretores.nacionalidade = nacionalidadeJSON
+            }
+        })
+
+        await Promise.all(promisse)
+
+        diretoresJSON.diretores = dadosDiretores
+
+        diretoresJSON.quantidade = dadosDiretores.length
+        diretoresJSON.status_code = 200
+
+        return diretoresJSON
     }else{
-        return false;
+        return false
     }
 }
 
@@ -139,7 +154,6 @@ const setAtualizarDiretores = async function(id, dadosDiretores, contentType){
                 dadosDiretores.data_nascimento == ''|| dadosDiretores.data_nascimento == undefined || dadosDiretores.data_nascimento == null || dadosDiretores.data_nascimento > 300 ||
                 dadosDiretores.data_falecimento == ''|| dadosDiretores.data_falecimento == undefined || dadosDiretores.data_falecimento == null || dadosDiretores.data_falecimento > 300||
                 dadosDiretores.biografia == ''|| dadosDiretores.biografia == undefined || dadosDiretores.biografia == null || dadosDiretores.biografia > 3000 ||
-                dadosDiretores.sexo == ''|| dadosDiretores.sexo == undefined || dadosDiretores.sexo == null || dadosDiretores.sexo > 30 ||
                 dadosDiretores.id_sexo == ''|| dadosDiretores.id_sexo == undefined || dadosDiretores.id_sexo == null
                 ){
                 return message.ERROR_REQUIRED_FIELDS 

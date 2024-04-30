@@ -6,6 +6,9 @@
  */
 const message = require('../model/config')
 const atoresDAO = require('../model/DAO/atores.js')
+const sexoDAO = require('../model/DAO/sexo.js')
+
+const nacionalidadeDAO = require('../model/DAO/nacionalidade')
 
 const setInserirAtores = async function(dadosAtores, contentType){
 
@@ -22,8 +25,8 @@ const setInserirAtores = async function(dadosAtores, contentType){
                 dadosAtores.data_nascimento == ''|| dadosAtores.data_nascimento == undefined || dadosAtores.data_nascimento == null || dadosAtores.data_nascimento > 300 ||
                 dadosAtores.data_falecimento == ''|| dadosAtores.data_falecimento == undefined || dadosAtores.data_falecimento == null || dadosAtores.data_falecimento > 300||
                 dadosAtores.biografia == ''|| dadosAtores.biografia == undefined || dadosAtores.biografia == null || dadosAtores.biografia > 3000 ||
-                dadosAtores.sexo == ''|| dadosAtores.sexo == undefined || dadosAtores.sexo == null || dadosAtores.sexo > 30 ||
-                dadosAtores.id_sexo == ''|| dadosAtores.id_sexo == undefined || dadosAtores.id_sexo == null
+                dadosAtores.id_sexo == ''|| dadosAtores.id_sexo == undefined || dadosAtores.id_sexo == null 
+
                 ){
                     return message.ERROR_REQUIRED_FIELDS
             }else{
@@ -56,19 +59,35 @@ const setInserirAtores = async function(dadosAtores, contentType){
 
 const getListarAtores = async function(){
 
-    let atoresJSON = {};
-    let dadosAtores = await atoresDAO.selectAllAtores();
+    let atoresJSON = {}
+    let dadosAtores = await atoresDAO.selectAllAtores()
 
     if(dadosAtores){
-        atoresJSON.atores = dadosAtores;
-        atoresJSON.quantidade = dadosAtores.length;
-        atoresJSON.status_code = 200;
 
-        return atoresJSON;
+        const promisse = dadosAtores.map(async(ator)=>{
+            let sexoJSON = await sexoDAO.selectByIdSexo(ator.id_sexo)
+            ator.sexo = sexoJSON
+            let nacionalidadeJSON = await nacionalidadeDAO.selectByIdNacionalidade(ator.id)
+           
+            if(nacionalidadeJSON.length > 0){ 
+                ator.nacionalidade = nacionalidadeJSON
+            }
+        })
+
+        await Promise.all(promisse)
+
+        atoresJSON.ator = dadosAtores
+
+        atoresJSON.quantidade = dadosAtores.length
+        atoresJSON.status_code = 200
+
+        return atoresJSON
     }else{
-        return false;
+        return false
     }
 }
+
+
 
 const getBuscarAtores = async function(id){
     let idAtores = id
@@ -139,7 +158,6 @@ const setAtualizarAtores = async function(id, dadosAtores, contentType){
                 dadosAtores.data_nascimento == ''|| dadosAtores.data_nascimento == undefined || dadosAtores.data_nascimento == null || dadosAtores.data_nascimento > 300 ||
                 dadosAtores.data_falecimento == ''|| dadosAtores.data_falecimento == undefined || dadosAtores.data_falecimento == null || dadosAtores.data_falecimento > 300||
                 dadosAtores.biografia == ''|| dadosAtores.biografia == undefined || dadosAtores.biografia == null || dadosAtores.biografia > 3000 ||
-                dadosAtores.sexo == ''|| dadosAtores.sexo == undefined || dadosAtores.sexo == null || dadosAtores.sexo > 30 ||
                 dadosAtores.id_sexo == ''|| dadosAtores.id_sexo == undefined || dadosAtores.id_sexo == null
                 ){
                 return message.ERROR_REQUIRED_FIELDS 

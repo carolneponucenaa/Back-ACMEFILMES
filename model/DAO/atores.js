@@ -16,7 +16,6 @@ const insertAtores=async function(dadosAtores){
             data_nascimento,
             data_falecimento,
             biografia,
-            sexo,
             id_sexo
           ) values (
               '${dadosAtores.nome}',
@@ -25,7 +24,6 @@ const insertAtores=async function(dadosAtores){
               '${dadosAtores.data_nascimento}',
               '${dadosAtores.data_falecimento}',
               '${dadosAtores.biografia}',
-              '${dadosAtores.sexo}',
               ${dadosAtores.id_sexo}
           )`
 
@@ -87,7 +85,6 @@ const updateAtores =async function(id, dadosAtores){
                                                 data_nascimento = '${dadosAtores.data_nascimento}',
                                                 data_falecimento = '${dadosAtores.data_falecimento}',
                                                 biografia = '${dadosAtores.biografia}',
-                                                sexo = '${dadosAtores.sexo}',
                                                 id_sexo = '${dadosAtores.id_sexo}'
                     where id = ${id}`
         let result=await prisma.$executeRawUnsafe(sql)
