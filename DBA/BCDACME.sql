@@ -101,20 +101,18 @@ foto varchar(150) not null,
 data_nascimento date not null,
 data_falecimento date,
 biografia text not null,
-sexo varchar(1) not null,
 id_sexo int not null,
 FOREIGN KEY (id_sexo)
 REFERENCES tbl_sexo (id)
 );
 
-insert into tbl_ator (nome, nome_artistico, foto, data_nascimento, data_falecimento, biografia, sexo, id_sexo) values
+insert into tbl_ator (nome, nome_artistico, foto, data_nascimento, data_falecimento, biografia, id_sexo) values
 ('Johnny Depp', 
 'Johnny Depp', 
 'johnny_depp.jpg', 
 '1963-06-09',
 NULL, 
 'Ator famoso conhecido por seus papéis em filmes como Piratas do Caribe e Edward Mãos de Tesoura.', 
-'M', 
 1),
 
 ('Scarlett Johansson', 
@@ -123,7 +121,6 @@ NULL,
 '1984-11-22', 
 NULL, 
 'Atriz renomada conhecida por seus papéis em filmes como Lost in Translation, Vingadores e Lucy.', 
-'F', 
 2);
 
 create table tbl_diretor (
@@ -134,20 +131,18 @@ foto varchar(150) not null,
 data_nascimento date not null,
 data_falecimento date,
 biografia text not null,
-sexo varchar(1) not null,
 id_sexo int not null,
 FOREIGN KEY (id_sexo)
 REFERENCES tbl_sexo (id)
 );
 
-insert into tbl_diretor (nome, nome_artistico, foto, data_nascimento, data_falecimento, biografia, sexo, id_sexo)values 
+insert into tbl_diretor (nome, nome_artistico, foto, data_nascimento, data_falecimento, biografia, id_sexo)values 
 ('Quentin Tarantino', 
 'Quentin Tarantino', 
 'quentin_tarantino.jpg', 
 '1963-03-27', 
 NULL, 
 'Diretor renomado conhecido por filmes como Pulp Fiction, Bastardos Inglórios e Kill Bill.', 
-'M', 
 1),
 
 ('Sofia Coppola', 
@@ -156,7 +151,6 @@ NULL,
 '1971-05-14', 
 NULL, 
 'Diretora e roteirista premiada conhecida por Lost in Translation e O Estranho que Nós Amamos.', 
-'F', 
 2);
 
 
